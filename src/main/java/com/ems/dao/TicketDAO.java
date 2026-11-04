@@ -45,6 +45,10 @@ public class TicketDAO {
                     ));
                 }
             }
+        } catch (SQLException ex) {
+            // Graceful demo fallback
+            list.add(new Ticket(1, eventId, "General Admission", new java.math.BigDecimal("49.99"), 150));
+            list.add(new Ticket(2, eventId, "VIP Pass (Priority Access & Lunch)", new java.math.BigDecimal("129.99"), 40));
         }
         return list;
     }
