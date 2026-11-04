@@ -37,27 +37,27 @@ public class WebServer {
 
     public void start() {
         try {
-            int currentPort = DEFAULT_PORT;
             String envPort = System.getenv("PORT");
             if (envPort != null && !envPort.isBlank()) {
-                try {
-                    currentPort = Integer.parseInt(envPort.trim());
-                } catch (NumberFormatException ignored) {}
-            }
-            boolean started = false;
-
-            while (!started && currentPort <= 8090) {
-                try {
-                    server = HttpServer.create(new InetSocketAddress(currentPort), 0);
-                    started = true;
-                    this.port = currentPort;
-                } catch (IOException e) {
-                    currentPort++;
+                // Cloud provider assigned port (e.g. 10000 on Render)
+                this.port = Integer.parseInt(envPort.trim());
+                server = HttpServer.create(new InetSocketAddress(this.port), 0);
+            } else {
+                // Local dev fallback searching 8080-8090
+                int currentPort = DEFAULT_PORT;
+                boolean started = false;
+                while (!started && currentPort <= 8090) {
+                    try {
+                        server = HttpServer.create(new InetSocketAddress(currentPort), 0);
+                        started = true;
+                        this.port = currentPort;
+                    } catch (IOException e) {
+                        currentPort++;
+                    }
                 }
-            }
-
-            if (!started) {
-                throw new IOException("Could not bind to any port between 8080 and 8090.");
+                if (!started) {
+                    throw new IOException("Could not bind to any port between 8080 and 8090.");
+                }
             }
 
             // Route Contexts
