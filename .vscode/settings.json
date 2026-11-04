@@ -1,0 +1,22 @@
+{
+    "java.project.sourcePaths": [
+        "src/main/java"
+    ],
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
+    ],
+    "java.home": "/Library/Java/JavaVirtualMachines/temurin-25.jdk/Contents/Home",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-25",
+            "path": "/Library/Java/JavaVirtualMachines/temurin-25.jdk/Contents/Home",
+            "default": true
+        }
+    ],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/target": true,
+        "**/bin": true
+    }
+}

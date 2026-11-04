@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch EMS (Modern Main)",
+            "request": "launch",
+            "mainClass": "com.ems.Main",
+            "projectName": "event-management-system"
+        },
+        {
+            "type": "java",
+            "name": "Launch EMS (EMSLogin)",
+            "request": "launch",
+            "mainClass": "EMSLogin",
+            "projectName": "event-management-system"
+        }
+    ]
+}
+

@@ -1,167 +1,122 @@
-# 🎟️ Event Management System (EMS)
+# 🎟️ Event Management & Ticketing System (EMS Web v2.0)
 
-A Java desktop application for managing events, ticket bookings, and user roles using **Java Swing** and **MySQL**.
-
----
-
-## 🧠 Overview
-
-The Event Management System (EMS) is a role-based desktop application that allows users to create, manage, and book events.
-
-The system includes three main roles:
-
-- 👨‍💼 **Admin** → manages organizers, approves events, views bookings  
-- 🧑‍💻 **Organizer** → creates events and manages tickets  
-- 🎟️ **Guest / Attendee** → browses events and purchases tickets  
+A modern, responsive **Web Application** for event registration, multi-tier ticketing, attendee management, and real-time analytics built with **Java (Embedded Web Server & REST API)**, **MySQL**, and **Tailwind CSS**.
 
 ---
 
-## 🚀 Features
+## 🌟 Key Web Application Features
 
-### 👨‍💼 Admin
-- Add new organizers  
-- View all organizers  
-- Approve or reject events  
-- View all bookings  
-
----
-
-### 🧑‍💻 Organizer
-- Create new events  
-- View personal events  
-- Add ticket types (price & quantity)  
-- Manage event tickets  
+- 🌐 **Responsive Web Interface**: Modern, mobile-ready UI built with **Tailwind CSS** and **FontAwesome**, rendering in Chrome, Safari, Firefox, and Edge.
+- 🔍 **Live Event Catalog & Search**: Multi-keyword instant search across titles, locations, and descriptions, plus genre filters (Technology, Workshops, Concerts, Conferences, Networking).
+- 🎟️ **Interactive Ticket Checkout**: Dynamic ticket tier selection (VIP, General Admission) with real-time subtotal calculation (`$Price × Qty = $Total`).
+- 📱 **Digital Boarding Pass with QR Code**: Generates official admission passes with simulated 2D QR matrix, booking references (`#EMS-XXXX`), and 1-click browser printing (`Ctrl+P` / `Cmd+P`).
+- ⚡ **ACID Transaction-Safe Bookings**: Strict database row-locking (`SELECT ... FOR UPDATE`), atomic inventory decrement, and automatic rollback on failure to prevent overselling.
+- 📊 **Executive Admin Control Center**: Real-time KPI metric cards for Gross Revenue ($), Total Bookings, and Active/Pending Events, plus 1-click event approval and organizer onboarding.
+- 🧑‍💻 **Organizer Studio**: Event creation wizard with schedules and venues, ticket tier management, and attendee sales roster.
+- 🔐 **Secure Role-Based Authentication**: SHA-256 password hashing with 1-click demo credential chips for fast evaluation.
 
 ---
 
-### 🎟️ Guest / Attendee
-- Browse approved events  
-- View event details  
-- Buy tickets  
-- Automatically create account if needed  
-- Check booking using Booking ID  
+## 👥 User Roles & Portals
 
----
-
-## 🛠️ Technologies Used
-
-- **Java**
-- **Java Swing (GUI)**
-- **MySQL**
-- **JDBC (Database Connectivity)**
-- **IntelliJ IDEA**
+| Role | Web Portal & Capabilities |
+| :--- | :--- |
+| 👨‍💼 **Admin** | **Executive Center**: Track platform revenue, review pending event submissions, approve/reject events, register organizers, and audit all transactions. |
+| 🧑‍💻 **Organizer** | **Organizer Studio**: Publish events, set multi-tier ticket prices/quantities, monitor revenue, and view attendee sales rosters. |
+| 🎟️ **Attendee / Guest** | **Catalog & Checkout**: Explore approved events, book passes with live price calculation, and look up tickets by Booking ID. |
 
 ---
 
 ## 📁 Project Structure
-event-management-system/
-│── src/
-│ ├── EMSLogin.java
-│ ├── EMSAdminGUI.java
-│ ├── EMSOrganizerGUI.java
-│ ├── EMSGuestGUI.java
-│
-│── database/
-│ └── EMSDB.sql
-│
-│── README.md
 
+```text
+event-management-system/
+│── database/
+│   └── EMSDB.sql                         # MySQL database schema & sample seed data
+│── src/
+│   └── main/
+│       ├── java/com/ems/
+│       │   ├── Main.java                 # Web server entry point
+│       │   ├── web/
+│       │   │   ├── WebServer.java        # Embedded HTTP Web Server & REST API router
+│       │   │   └── JsonUtil.java         # Lightweight JSON parser & serializer
+│       │   ├── config/
+│       │   │   └── DBConnection.java     # Database connection & ACID transaction helper
+│       │   ├── model/                    # Domain POJOs (User, Event, Ticket, Booking, etc.)
+│       │   ├── dao/                      # Data Access Objects (UserDAO, EventDAO, TicketDAO, BookingDAO)
+│       │   └── util/                     # Security (PasswordUtil) & Themes
+│       └── resources/
+│           ├── db.properties             # Database credentials
+│           └── web/
+│               └── index.html            # Responsive Tailwind CSS Web Application
+│── run.sh                                # One-click startup script (starts server & opens browser)
+│── Run-EMS.command                       # macOS double-clickable launcher
+│── pom.xml                               # Maven build configuration
+└── README.md
+```
 
 ---
 
 ## 🗄️ Database Setup
 
-### Create Database
+1. Make sure your **MySQL Server** is running.
+2. In **MySQL Workbench** or Terminal, execute [database/EMSDB.sql](database/EMSDB.sql):
+   ```bash
+   mysql -u root -p < database/EMSDB.sql
+   ```
+3. Verify your database password in [`src/main/resources/db.properties`](src/main/resources/db.properties):
+   ```properties
+   db.host=localhost
+   db.port=3306
+   db.name=EMSDB
+   db.user=root
+   db.password=Milo-098
+   ```
 
-Open MySQL and run:
+---
 
-```sql
-EMSDB.sql
+## 🔑 Default Demo Accounts
 
-▶️ How to Run the Project
-🔧 Requirements
+| Role | Email | Password | Access Level |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin@ems.com` | `admin123` | Executive Control Center |
+| **Organizer** | `organizer@ems.com` | `organizer123` | Organizer Studio |
+| **Organizer 2** | `david@ems.com` | `organizer123` | Organizer Studio |
+| **Attendee** | `guest@ems.com` | `guest123` | Events Catalog & Checkout |
 
-Make sure you have:
+*Tip: In the web login modal, you can simply click any of the 1-click demo chips to fill in the credentials instantly!*
 
-Java JDK (8 or higher)
-MySQL Server
-IntelliJ IDEA (or any Java IDE)
-MySQL JDBC Driver (mysql-connector-j)
+---
 
-⚙️ Step 1: Add JDBC Driver
+## ▶️ How to Run the Web Application
 
-Download MySQL Connector:
+### Method 1: Terminal (Mac / Linux)
+```bash
+./run.sh
+```
+*The script compiles the project, starts the embedded HTTP server on port 8080, and automatically opens `http://localhost:8080` in your default browser.*
 
-👉 https://dev.mysql.com/downloads/connector/j/
+### Method 2: Double-Click on Mac (No Terminal Required)
+Double-click [`Run-EMS.command`](Run-EMS.command) in **Finder**.
 
-Then in IntelliJ:
+### Method 3: Open in Browser Manually
+If the server is running, navigate to:  
+👉 **`http://localhost:8080`**
 
-File → Project Structure
-Libraries → Add JAR
-Select the connector file
+---
 
-⚙️ Step 2: Configure Database
+## 📤 How to Submit on Google Drive
 
-Open your Java files and update:
-```java
-DB_USER = "root"
-DB_PASS = "your_password"
+1. Right-click the `event-management-system` folder in Finder.
+2. Select **Compress "event-management-system"** to create a `.zip` archive.
+3. Upload the `.zip` file directly to your Google Drive or university submission link!
 
-Make sure:
-MySQL is running
-Database name = EMSDB
+When the evaluator unzips your folder, all they need to do is run `./run.sh` (or double-click `Run-EMS.command`), and the web application will open on their screen!
 
-▶️ Step 3: Run Application
+---
 
-Run this file:
-EMSLogin.java
+## 👨‍💻 Author & Academic Project
 
-👤 How to Use the System
-👨‍💼 Admin Flow
-Login as Admin
-Add organizers
-Approve or reject events
-View bookings
-
-🧑‍💻 Organizer Flow
-Login as Organizer
-Create event
-Wait for approval
-Add tickets
-
-🎟️ Guest Flow
-Continue as Guest
-Browse approved events
-Load tickets
-Buy tickets
-Save Booking ID
-Check booking status
-
-📌 Important Notes
-Events must be approved before guests can see them
-Ticket quantity decreases after purchase
-Organizer can only manage their own events
-Booking ID is required to track purchases
-
-⚠️ Common Issues
-❌ Database connection error
-Check MySQL is running
-Verify username/password
-Ensure JDBC driver is added
-❌ No user found
-Insert users manually in database
-❌ Organizer not working
-Make sure organizer exists in Users table
-
-🎯 Learning Outcomes
-Java GUI development with Swing
-Database integration using JDBC
-SQL schema design and relationships
-Role-based system design
-Full system workflow (Admin → Organizer → Guest)
-
-👨‍💻 Author
-
-Fares Aldeeb
-AI Student @ UPM (University of Prince Mugrin)
-
+- **Author**: Fares Aldeeb
+- **Department**: AI Student @ UPM (University of Prince Mugrin)
+- **Course**: CS351 - Database & Object-Oriented Software Systems

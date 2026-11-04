@@ -1,0 +1,24 @@
+#!/bin/bash
+DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+PARENT="$(cd "$DIR/.." && pwd)"
+cd "$PARENT"
+
+# Locate installed JDK
+for jdk in /Library/Java/JavaVirtualMachines/*/Contents/Home; do
+    if [ -d "$jdk" ]; then
+        export JAVA_HOME="$jdk"
+        export PATH="$JAVA_HOME/bin:$PATH"
+        break
+    fi
+done
+
+# If bin is missing, compile
+if [ ! -d "$PARENT/bin/com" ]; then
+    mkdir -p "$PARENT/bin"
+    javac -cp "$PARENT/lib/*" -d "$PARENT/bin" $(find "$PARENT/src/main/java" -name "*.java")
+    cp "$PARENT/src/main/resources/db.properties" "$PARENT/bin/"
+fi
+
+# Launch Java Application silently
+exec java -cp "$PARENT/bin:$PARENT/lib/*" com.ems.Main
+
